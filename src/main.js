@@ -5,6 +5,7 @@ import store from './store'
 import axios from 'axios'
 import '../src/assets/css/reset.css'
 import '../src/assets/stulus/mixins.styl'
+import './plugins/element.js'
 Vue.config.productionTip = false
 
 
