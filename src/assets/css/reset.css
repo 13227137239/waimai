@@ -179,3 +179,8 @@ body {
 * {
     touch-action: pan-y;
 }
+.tuichubtn{
+  
+    width: 100vw;
+  
+}

@@ -2,7 +2,7 @@
   <div>
             <div class="shop_container">
           <ul class="shop_list" v-if="shopsList.length>0">
-            <li class="shop_li border-1px" v-for="(item,index) in shopsList" :key="index" >
+            <li class="shop_li border-1px" v-for="(item,index) in shopsList" :key="index" @click="$router.push('/shop')">
               <a >
                 <div class="shop_left">
                   <img class="shop_img" :src="item.image_path" />
@@ -12,18 +12,11 @@
                     <h4 class="shop_title ellipsis">{{item.name}}</h4>
                     <ul class="shop_detail_ul">
                       <li class="supports" v-for="(item1, index) in item.supports" :key="index">{{item1.icon_name}}</li>
-                  
+
                     </ul>
                   </section>
                   <section class="shop_rating_order">
                     <section class="shop_rating_order_left">
-                      <!-- <div class="star star-24">
-                        <span class="star-item on"></span>
-                        <span class="star-item on"></span>
-                        <span class="star-item on"></span>
-                        <span class="star-item half"></span>
-                        <span class="star-item off"></span>
-                      </div> -->
                       <Star :score="item.rating" :size="24"></Star>
                       <div class="rating_section">{{item.rating}}</div>
                       <div class="order_section">月售{{item.recent_order_num}}单</div>

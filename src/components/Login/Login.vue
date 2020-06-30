@@ -167,6 +167,7 @@ if(user.code == 1){
         this.alertText = msg
         this.captchaImg = 'http://localhost:4000/captcha?time='+Date.now()
       }else{
+        this.captchaImg = 'http://localhost:4000/captcha?time='+Date.now()
   this.computerTime = 0
       this.ifbtn = true
       this.a = ''

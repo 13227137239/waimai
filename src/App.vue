@@ -6,9 +6,21 @@
 </template>
 <script>
 import FooterGuide from './components/FooterGuide/FooterGuide.vue'
+import {mapMutations} from 'vuex'
 export default {
   components: {
     FooterGuide
+  },
+  methods:{
+    ...mapMutations(['receive_userInfo'])
+  },
+ async mounted(){
+    const result = await this.$http.get("/dev-api/userinfo")
+    if(result.data.data){
+       this.receive_userInfo(result.data.data)
+    }
+   
+    console.log(result)
   }
 }
 </script>

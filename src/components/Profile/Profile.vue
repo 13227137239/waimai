@@ -100,6 +100,9 @@
           </div>
         </a>
       </section>
+       <section class="profile_my_order border-1px">
+     <van-button type="warning"    class="tuichubtn" v-show="userInfo._id" @click="quit">退出登录</van-button>
+       </section>
     </section>
   </div>
 </template>
@@ -112,7 +115,24 @@ export default {
   },
   computed:{
     ...mapState(['userInfo'])
+  },
+  methods:{
+   quit(){
+this.$Dialog.confirm({
+  title: '提示',
+  message: '确认退出吗？',
+})
+  .then(async () => {
+const result =await this.$http.get("/dev-api/logout")
+    window.location.reload()
+  })
+  .catch(() => {
+   
+  });
+      
+      
   }
+}
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
