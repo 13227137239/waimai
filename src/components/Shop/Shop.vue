@@ -3,16 +3,19 @@
       <Shopheader></Shopheader>
      <div class="tab">
          <div class="tab-item">
-             <router-link to="/shopGoods">点餐</router-link>
+             <router-link to="/shopGoods" replace>点餐</router-link>
          </div>
          <div class="tab-item">
-             <router-link to="/shopRatings">评价</router-link>
+             <router-link to="/shopRatings" replace>评价</router-link>
          </div>
          <div class="tab-item">
-             <router-link to="/shopInfo">商家</router-link>
+             <router-link to="/shopInfo" replace>商家</router-link>
          </div>
      </div>
-      <router-view></router-view>
+     <keep-alive>
+          <router-view></router-view>
+     </keep-alive>
+     
   </div>
 </template>
 <script>
@@ -26,12 +29,7 @@ export default {
         ...mapActions(['AsyncGetShopGoods','AsyncGetRatings','AsyncGetInfo'])
     },
    async mounted(){
-        const {data:src} = await this.$http.get('/goods')
-        this.AsyncGetShopGoods(src)
-        console.log(src)
-        const {data:src1} = await this.$http.get('/ratings')
-        this.AsyncGetRatings(src1)
-        console.log(src1)
+
         const {data:src2} = await this.$http.get('/info')
         this.AsyncGetInfo(src2)
         console.log(src2)

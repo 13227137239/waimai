@@ -21,7 +21,8 @@ export default {
   
     },
     //异步保存评价
-   AsyncGetRatings(context,ratings){
+   AsyncGetRatings(context,ratings,callback){
+       
    context.commit('getRatings',ratings)
     },
     //异步保存店铺信息
@@ -35,6 +36,13 @@ export default {
         }else{
         context.commit('falsecount',{food})
         }
-    }
+    },
 
+    //异步搜索
+    // /search_shops
+  async AsyncSearch(context,getarr){
+        const geohash = context.state.latitude+','+context.state.longitude
+    const {data:src}=await (getarr.this1).$http.get('/dev-api/search_shops?geohash='+geohash+'&keyword='+getarr.keyword)
+    context.commit('Search',src.data)
+    }
 }

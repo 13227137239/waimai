@@ -54,6 +54,8 @@ import CartControl from '../../CartControl/CartControl.vue'
 import ShopCart from '../../ShopCart/ShopCart.vue'
 import Food from '../../Food/Food.vue'
 import { mapState } from 'vuex'
+import {mapActions} from 'vuex'
+
 import Vue from 'vue'
 export default {
     data() {
@@ -90,23 +92,28 @@ export default {
     showtop(val){
       this.scrollY = this.tops[val]+5
       this.foodsScroll.scrollTo(0,-this.tops[val]-5,300)
-      console.log(val)
     },
     //控制商品详情
     showFood(food){
-      console.log(1)
       this.food = food
       Vue.set(food,'isShow',true)
       // this.food.isShow = true
-    }
+    },
+    ...mapActions(['AsyncGetShopGoods'])
   },
+ async mounted(){
+        const {data:src} = await this.$http.get('/goods')
+        this.AsyncGetShopGoods(src)
+  },
+
   watch: {
     goods() {
       this.$nextTick(() => {
-      let listScroll =   new BScroll('.menu-wrapper',{
+        if(!this.foodsScroll){
+ let listScroll =   new BScroll('.menu-wrapper',{
         click:true
       })
-
+      
         //右侧滑动处理
         this.foodsScroll = new BScroll('.foods-wrapper', {
           probeType: 2,
@@ -125,7 +132,11 @@ export default {
         lis.forEach((item)=>{
           this.tops.push(item.offsetTop)
         })
-        console.log(this.tops)
+        }else if(this.foodsScroll){
+          listScroll.refresh(),
+          this.foodsScroll.refresh()
+        }
+     
       })
     }
   },

@@ -3,8 +3,8 @@
     <div class="shopcart">
       <div class="content">
         <div class="content-left" @click="totalPrice==0?'':isShow=!isShow">
-          <div class="logo-wrapper"  >
-            <div class="logo" :class="{highlight:totalCount}" >
+          <div class="logo-wrapper">
+            <div class="logo" :class="{highlight:totalCount}">
               <i class="iconfont icon-shopping_cart" :class="{highlight:totalCount}"></i>
             </div>
             <div class="num" v-if="totalCount">{{totalCount}}</div>
@@ -12,49 +12,68 @@
           <div class="price" :class="{highlight:totalCount}">￥{{totalPrice}}</div>
           <div class="desc">另需配送费￥{{info.deliveryPrice}} 元</div>
         </div>
-        <div class="content-right" >
+        <div class="content-right">
           <div class="pay" :class="payclass">{{payText}}</div>
         </div>
       </div>
-      <div class="shopcart-list"  v-if="listshow">
+      <transition name="move">
+        <div class="shopcart-list" v-show="listshow">
           <!-- style="display: none;" -->
-        <div class="list-header">
-          <h1 class="title">购物车</h1>
-          <span class="empty">清空</span>
-        </div>
-        <div class="list-content">
-          <ul>
-            <li class="food" v-for="(item,index) in cartList" :key="index">
-              <span class="name">{{item.name}}</span>
-              <div class="price">
-                <span>￥{{item.price*item.count}}</span>
-              </div>
-              <div class="cartcontrol-wrapper">
-                <div class="cartcontrol">
-                 <CartControl :food='item'></CartControl>
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty" @click="empty">清空</span>
+          </div>
+          <div class="list-content">
+            <ul>
+              <li class="food" v-for="(item,index) in cartList" :key="index">
+                <span class="name">{{item.name}}</span>
+                <div class="price">
+                  <span>￥{{item.price*item.count}}</span>
                 </div>
-              </div>
-            </li>
-          </ul>
+                <div class="cartcontrol-wrapper">
+                  <div class="cartcontrol">
+                    <CartControl :food="item"></CartControl>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
-    <div class="list-mask" v-if="listshow" @click="totalPrice==0?'':isShow=!isShow"></div>
+    <div class="list-mask" v-show="listshow" @click="totalPrice==0?'':isShow=!isShow"></div>
   </div>
 </template>
 <script>
+import BScroll from 'better-scroll'
 import { mapState, mapGetters } from 'vuex'
-
 import CartControl from '../CartControl/CartControl.vue'
 export default {
-    data(){
-        return{
-            isShow:false
-        }
-    },
-    components:{
-        CartControl
-    },
+  data() {
+    return {
+      isShow: false
+    }
+  },
+  methods: {
+    //清空购物车
+    empty() {
+      this.$Dialog
+        .confirm({
+          title: '提示',
+          message: '确认清空吗？'
+        })
+        .then(() => {
+          this.cartList.forEach(item => {
+            item.count = 0
+          }),
+            this.cartList.splice(0)
+        })
+        .catch(() => {})
+    }
+  },
+  components: {
+    CartControl
+  },
   computed: {
     ...mapState(['cartList', 'info']),
     ...mapGetters(['totalCount', 'totalPrice']),
@@ -72,29 +91,37 @@ export default {
         if (totalPrice === 0) {
           return `￥${minPrice}元起送`
         } else if ((totalPrice > 0) & (totalPrice < minPrice)) {
-          return `还差${minPrice-totalPrice}起送`
+          return `还差${minPrice - totalPrice}起送`
         } else {
           return `去结算`
         }
       }
     },
     //控制显示隐藏
-    listshow(){
-        if(this.totalPrice == 0){
-           
-            return false
-        }
-        return this.isShow
-        
+    listshow() {
+      if (this.totalPrice == 0) {
+        return false
+      }
+      if (this.isShow) {
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll('.list-content')
+          } else {
+            //刷新滑动
+            this.scroll.refresh()
+          }
+        })
+      }
+      return this.isShow
     }
   },
-  watch:{
-      totalPrice(val){
-          console.log(this.cartList)
-      if(val==0){
-          this.isShow =false
+  watch: {
+    totalPrice(val) {
+      console.log(this.cartList)
+      if (val == 0) {
+        this.isShow = false
       }
-      }
+    }
   }
 }
 </script>

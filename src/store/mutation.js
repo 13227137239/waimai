@@ -47,6 +47,9 @@ export default {
                 state.cartList.splice(state.cartList.indexOf(food),1)
             }
         }
-    }
-
+    },
+   //搜索
+   Search(state,SearchList){
+       state.SearchList  =  SearchList
+   }
 }

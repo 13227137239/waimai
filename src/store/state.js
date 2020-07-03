@@ -9,4 +9,5 @@ export default {
     ratings:[],       //商品评价列表
     info :{}  ,               //商家信息
     cartList:[],            //购物车商品
+    SearchList:[] ,        //搜索信息
 }

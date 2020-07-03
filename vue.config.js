@@ -15,6 +15,25 @@ module.exports = {
 		}
 	}
 }, 
+
+chainWebpack:config=>{
+  config.when(process.env.NODE_ENV === 'production',config=>{
+	  config.entry('app').clear().add('./src/main-prod.js')
+	  config.set('externals',{
+		  vue:'Vue',
+		  axios:'axios',
+		//   'vue-router':'VueRouter',
+		  mockjs:'Mock'
+
+	  }),
+	  'transform-remove-console'
+  })
+  config.when(process.env.NODE_ENV === 'development',config=>{
+	  config.entry('app').clear().add('./src/main-dev.js')
+  })
+
+},
+
 lintOnSave: false, // 关闭格式检查
 productionSourceMap: false // 打包时不会生成 .map 文件，加快打包速度 
 }

@@ -15,6 +15,7 @@ module.exports = {
       "libraryName": "vant",
       "libraryDirectory": "es",
       "style": true
-    }]
+    }],
+    "@babel/plugin-syntax-dynamic-import"
   ]
 }
